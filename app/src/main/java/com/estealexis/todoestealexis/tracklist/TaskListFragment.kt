@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
 
 class TaskListFragment : Fragment(){
     override fun onCreateView(
@@ -17,27 +19,47 @@ class TaskListFragment : Fragment(){
         savedInstanceState: Bundle?
 
     ): View? {
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView?.layoutManager =  LinearLayoutManager(activity)
-        recyclerView?.adapter =  TaskListAdapter(taskList)
-
         return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
-    private val taskList = listOf("Task 1", "Task 2", "Task 3")
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+
+        recyclerView.layoutManager =  LinearLayoutManager(activity)
+        recyclerView.adapter =  TaskListAdapter(taskList)
+
+        val aaa = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        aaa.setOnClickListener(){
+            taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
+            recyclerView.adapter =  TaskListAdapter(taskList)
+
+        }
+
+
+    }
+    private val taskList = mutableListOf(
+        Task(id = "id_1", title = "Task 1", description = "description 1"),
+        Task(id = "id_2", title = "Task 2"),
+        Task(id = "id_3", title = "Task 3", description = "description 3")
+    )
 }
 
 
-class TaskListAdapter(private val taskList: List<String>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(taskTitle: String) {
+        fun bind(taskTitle: Task) {
             itemView.apply {
                 val test = itemView.findViewById<TextView>(R.id.task_title)
-                test.text = taskTitle
+                test.text = taskTitle.getTaskTilte()
+                if(taskTitle.getTaskDescription() != ""){
+                    test.text = "${test.text} \n ${taskTitle.getTaskDescription()}"
+                }
                 //afficher les données et attacher les listeners aux différentes vues de notre [itemView]
             }
         }
     }
+
 
     override fun getItemCount(): Int {
         return this.taskList.count()
@@ -51,5 +73,6 @@ class TaskListAdapter(private val taskList: List<String>) : RecyclerView.Adapter
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position])
     }
+
 
 }
