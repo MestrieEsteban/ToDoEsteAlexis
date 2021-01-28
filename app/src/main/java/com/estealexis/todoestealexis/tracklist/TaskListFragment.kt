@@ -52,7 +52,8 @@ class TaskListFragment : Fragment(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
-        println(taskList)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView?.adapter?.notifyDataSetChanged()
     }
 
     private val taskList = mutableListOf(
