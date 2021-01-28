@@ -1,5 +1,6 @@
 package com.estealexis.todoestealexis.tracklist
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.*
 
 class TaskListFragment : Fragment(){
     override fun onCreateView(
@@ -33,9 +35,9 @@ class TaskListFragment : Fragment(){
         recyclerView.adapter =  TaskListAdapter(taskList)
 
 
-        TaskListAdapter(taskList).onDeleteTask = { task ->
+        (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
             taskList.remove(task)
-            recyclerView.adapter =  TaskListAdapter(taskList)
+            recyclerView.adapter?.notifyItemChanged(taskList.count())
 
         }
 
@@ -44,8 +46,14 @@ class TaskListFragment : Fragment(){
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
-
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
+        println(taskList)
+    }
+
     private val taskList = mutableListOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),

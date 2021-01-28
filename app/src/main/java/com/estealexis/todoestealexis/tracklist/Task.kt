@@ -1,6 +1,8 @@
 package com.estealexis.todoestealexis.tracklist
 
-class Task(id: String,title: String, description: String = "") {
+import java.io.Serializable
+
+class Task(id: String,title: String, description: String = "") : Serializable {
 
     val id: String = id
     val title: String = title
