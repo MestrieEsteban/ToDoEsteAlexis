@@ -1,5 +1,6 @@
 package com.estealexis.todoestealexis.tracklist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
+import com.estealexis.todoestealexis.task.TaskActivity
+import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.*
 
 class TaskListFragment : Fragment(){
     override fun onCreateView(
@@ -33,13 +35,14 @@ class TaskListFragment : Fragment(){
 
         TaskListAdapter(taskList).onDeleteTask = { task ->
             taskList.remove(task)
+            recyclerView.adapter =  TaskListAdapter(taskList)
+
         }
 
         val aaa = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         aaa.setOnClickListener(){
-            taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
-            recyclerView.adapter =  TaskListAdapter(taskList)
-
+            val intent = Intent(activity, TaskActivity::class.java)
+            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
     }
@@ -52,6 +55,8 @@ class TaskListFragment : Fragment(){
 
 
 class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+    var onDeleteTask: ((Task) -> Unit)? = null
+
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(taskTitle: Task) {
             itemView.apply {
@@ -61,17 +66,17 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
                     test.text = "${test.text} \n ${taskTitle.getTaskDescription()}"
                 }
                 //afficher les données et attacher les listeners aux différentes vues de notre [itemView]
+                var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
+                bb.setOnClickListener {
+                    onDeleteTask?.invoke(taskTitle)
+                }
             }
-            var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
-            bb.setOnClickListener {
-                onDeleteTask?.invoke(taskTitle)
-            }
+
         }
 
     }
 
 
-    var onDeleteTask: ((Task) -> Unit)? = null
 
     override fun getItemCount(): Int {
         return this.taskList.count()
