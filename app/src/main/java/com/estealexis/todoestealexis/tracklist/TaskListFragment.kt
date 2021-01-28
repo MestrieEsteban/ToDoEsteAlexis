@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,13 +30,17 @@ class TaskListFragment : Fragment(){
         recyclerView.layoutManager =  LinearLayoutManager(activity)
         recyclerView.adapter =  TaskListAdapter(taskList)
 
+
+        TaskListAdapter(taskList).onDeleteTask = { task ->
+            taskList.remove(task)
+        }
+
         val aaa = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         aaa.setOnClickListener(){
             taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
             recyclerView.adapter =  TaskListAdapter(taskList)
 
         }
-
 
     }
     private val taskList = mutableListOf(
@@ -57,15 +62,22 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
                 }
                 //afficher les données et attacher les listeners aux différentes vues de notre [itemView]
             }
+            var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
+            bb.setOnClickListener {
+                onDeleteTask?.invoke(taskTitle)
+            }
         }
+
     }
 
+
+    var onDeleteTask: ((Task) -> Unit)? = null
 
     override fun getItemCount(): Int {
         return this.taskList.count()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListAdapter.TaskViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(itemView)
     }
