@@ -17,8 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.estealexis.todoestealexis.task.TaskActivity"
-            tools:ignore="Instantiatable">
+        <activity android:name="com.estealexis.todoestealexis.task.TaskActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
