@@ -36,8 +36,9 @@ class TaskListFragment : Fragment(){
 
 
         (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
+            print(task.getTaskTilte())
             taskList.remove(task)
-            recyclerView.adapter?.notifyItemChanged(taskList.count())
+            recyclerView.adapter?.notifyDataSetChanged()
 
         }
 
