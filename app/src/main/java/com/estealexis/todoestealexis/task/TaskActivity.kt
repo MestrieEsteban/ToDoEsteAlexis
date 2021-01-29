@@ -1,11 +1,10 @@
 package com.estealexis.todoestealexis.task
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.tracklist.Task
 import java.util.*
@@ -19,12 +18,14 @@ class TaskActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ass_task)
         var valid = findViewById<Button>(R.id.button)
-        valid.setOnClickListener({
+        valid.setOnClickListener {
             val resultIntent = Intent()
-            val task= Task(id = UUID.randomUUID().toString(), title = "New Task !")
+            val title = findViewById<EditText>(R.id.editTitle)
+            val description = findViewById<EditText>(R.id.editDescription)
+            val task = Task(id = UUID.randomUUID().toString(), title = "${title.text}", description = "${description.text}")
             resultIntent.putExtra("task", task)
             setResult(RESULT_OK, resultIntent)
             finish()
-        })
+        }
     }
 }

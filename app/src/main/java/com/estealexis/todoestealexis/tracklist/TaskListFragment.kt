@@ -14,7 +14,6 @@ import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.*
 
 class TaskListFragment : Fragment(){
     override fun onCreateView(
@@ -50,7 +49,8 @@ class TaskListFragment : Fragment(){
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
+        val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+        taskList.add(task)
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView?.adapter?.notifyDataSetChanged()
     }
