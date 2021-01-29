@@ -34,7 +34,6 @@ class TaskListFragment : Fragment(){
 
 
         (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
-            print(task.getTaskTilte())
             taskList.remove(task)
             recyclerView.adapter?.notifyDataSetChanged()
 
@@ -70,7 +69,7 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
         fun bind(taskTitle: Task) {
             itemView.apply {
                 val test = itemView.findViewById<TextView>(R.id.task_title)
-                test.text = taskTitle.getTaskTilte()
+                test.text = taskTitle.getTaskTitle()
                 if(taskTitle.getTaskDescription() != ""){
                     test.text = "${test.text} \n ${taskTitle.getTaskDescription()}"
                 }

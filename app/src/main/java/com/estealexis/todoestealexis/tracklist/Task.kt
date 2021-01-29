@@ -8,7 +8,7 @@ class Task(id: String,title: String, description: String = "") : Serializable {
     val title: String = title
     val description: String = description
 
-    fun getTaskTilte(): String {
+    fun getTaskTitle(): String {
         return this.title
     }
 
