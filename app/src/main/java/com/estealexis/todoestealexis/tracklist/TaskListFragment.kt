@@ -54,21 +54,26 @@ class TaskListFragment : Fragment(){
         recyclerView.adapter =  TaskListAdapter(taskList)
 
         tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
-            val tk = TaskListAdapter(it as MutableList<Task>)
             recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
+
+            (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
+                lifecycleScope.launch {
+                    tasksRepository.deleteTask(task)
+                }
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+
+            (recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
+                val intent = Intent(activity, TaskActivity::class.java)
+                intent.putExtra("editedTask", task)
+                startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+            }
+
         })
 
-        (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
-            println(task)
-            recyclerView.adapter?.notifyDataSetChanged()
 
-        }
 
-        (recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
-            val intent = Intent(activity, TaskActivity::class.java)
-            intent.putExtra("editedTask", task)
-            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
-        }
+
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener(){
@@ -79,17 +84,10 @@ class TaskListFragment : Fragment(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+        val isUpdate = data?.getSerializableExtra("isUpdate")
         lifecycleScope.launch {
-            tasksRepository.addTask(task)
+            if(isUpdate === null){ tasksRepository.addTask(task) } else { tasksRepository.updateTask(task) }
         }
-        /*val position = taskList.indexOfFirst { it.id == task.id}
-        if(position != -1){
-            taskList[position] = task
-        }else{
-            taskList.add(task)
-        }
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView?.adapter?.notifyDataSetChanged()*/
     }
 
     private val taskList = mutableListOf(

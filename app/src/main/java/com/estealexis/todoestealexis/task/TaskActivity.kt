@@ -19,6 +19,7 @@ class TaskActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ass_task)
         val editedTask = intent.getSerializableExtra(TASK_KEY2) as? Task
+
         val title = findViewById<EditText>(R.id.editTitle)
         val description = findViewById<EditText>(R.id.editDescription)
         val myTitle = if (editedTask?.title == "") "" else editedTask?.title
@@ -30,7 +31,9 @@ class TaskActivity: AppCompatActivity(){
             val resultIntent = Intent()
             val taskId = if (editedTask?.id == "") UUID.randomUUID().toString() else editedTask?.id
             val task = Task(id = "$taskId", title = "${title.text}", description = "${description.text}")
+            val isUpdate = if (editedTask?.title == "") "" else editedTask?.title
             resultIntent.putExtra("task", task)
+            resultIntent.putExtra("isUpdate", isUpdate)
             setResult(RESULT_OK, resultIntent)
             finish()
         }
