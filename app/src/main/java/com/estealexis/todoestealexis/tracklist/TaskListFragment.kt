@@ -38,9 +38,14 @@ class TaskListFragment : Fragment(){
             recyclerView.adapter?.notifyDataSetChanged()
 
         }
+        (recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra("editedTask", task)
+            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+        }
 
-        val aaa = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        aaa.setOnClickListener(){
+        val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        fab.setOnClickListener(){
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
@@ -49,7 +54,12 @@ class TaskListFragment : Fragment(){
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-        taskList.add(task)
+        val position = taskList.indexOfFirst { it.id == task.id}
+        if(position != -1){
+            taskList[position] = task
+        }else{
+            taskList.add(task)
+        }
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView?.adapter?.notifyDataSetChanged()
     }
@@ -64,6 +74,7 @@ class TaskListFragment : Fragment(){
 
 class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     var onDeleteTask: ((Task) -> Unit)? = null
+    var onEditTask: ((Task) -> Unit)? = null
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(taskTitle: Task) {
@@ -77,6 +88,11 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
                 var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
                 bb.setOnClickListener {
                     onDeleteTask?.invoke(taskTitle)
+                }
+
+                var editButton = itemView.findViewById<ImageButton>(R.id.imageButton3)
+                editButton.setOnClickListener{
+                    onEditTask?.invoke(taskTitle)
                 }
             }
 
