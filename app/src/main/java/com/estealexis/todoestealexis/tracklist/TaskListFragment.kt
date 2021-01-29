@@ -1,7 +1,6 @@
 package com.estealexis.todoestealexis.tracklist
 
-import android.app.Activity.RESULT_CANCELED
-import android.app.Activity.RESULT_OK
+import TasksRepository
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
+import com.estealexis.todoestealexis.network.Api
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
+
+
 
 class TaskListFragment : Fragment(){
     override fun onCreateView(
@@ -28,6 +32,20 @@ class TaskListFragment : Fragment(){
         return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
 
+    private val tasksRepository = TasksRepository()
+
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            val userInfo = Api.userService.getInfo().body()!!
+            val infoUser = view?.findViewById<TextView>(R.id.userInfoText)
+            infoUser?.text = "${userInfo.firstName} ${userInfo.lastName}"
+            tasksRepository.refresh()
+        }
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
@@ -35,12 +53,17 @@ class TaskListFragment : Fragment(){
         recyclerView.layoutManager =  LinearLayoutManager(activity)
         recyclerView.adapter =  TaskListAdapter(taskList)
 
+        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
+            val tk = TaskListAdapter(it as MutableList<Task>)
+            recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
+        })
 
         (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
-            taskList.remove(task)
+            println(task)
             recyclerView.adapter?.notifyDataSetChanged()
 
         }
+
         (recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
             val intent = Intent(activity, TaskActivity::class.java)
             intent.putExtra("editedTask", task)
@@ -49,29 +72,25 @@ class TaskListFragment : Fragment(){
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener(){
-            startForResult.launch(Intent(activity, TaskActivity::class.java))
+            val intent = Intent(activity, TaskActivity::class.java)
+            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
     }
-    private val startForResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                when(result.resultCode){
-                    RESULT_OK -> {
-                        val task = result.data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-                        val position = taskList.indexOfFirst { it.id == task.id}
-                        if(position != -1){
-                            taskList[position] = task
-                        }else{
-                            taskList.add(task)
-                        }
-                        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
-                        recyclerView?.adapter?.notifyDataSetChanged()
-                    }
-                    RESULT_CANCELED -> {
-
-                    } else -> {
-                } }
-            }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+        lifecycleScope.launch {
+            tasksRepository.addTask(task)
+        }
+        /*val position = taskList.indexOfFirst { it.id == task.id}
+        if(position != -1){
+            taskList[position] = task
+        }else{
+            taskList.add(task)
+        }
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView?.adapter?.notifyDataSetChanged()*/
+    }
 
     private val taskList = mutableListOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
@@ -81,27 +100,28 @@ class TaskListFragment : Fragment(){
 }
 
 
-class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class TaskListAdapter(private val taskList: MutableList<Task> ) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     var onDeleteTask: ((Task) -> Unit)? = null
     var onEditTask: ((Task) -> Unit)? = null
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(taskTitle: Task) {
+        fun bind(task: Task) {
             itemView.apply {
                 val test = itemView.findViewById<TextView>(R.id.task_title)
-                test.text = taskTitle.getTaskTitle()
-                if(taskTitle.getTaskDescription() != ""){
-                    test.text = "${test.text} \n ${taskTitle.getTaskDescription()}"
+                test.text = task.title
+                if(task.description != ""){
+                    test.text = "${test.text} \n ${task.description}"
                 }
-                //afficher les données et attacher les listeners aux différentes vues de notre [itemView]
+
                 var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
                 bb.setOnClickListener {
-                    onDeleteTask?.invoke(taskTitle)
+                    println("dqsqsdqsdqsd")
+                    onDeleteTask?.invoke(task)
                 }
 
                 var editButton = itemView.findViewById<ImageButton>(R.id.imageButton3)
                 editButton.setOnClickListener{
-                    onEditTask?.invoke(taskTitle)
+                    onEditTask?.invoke(task)
                 }
             }
 

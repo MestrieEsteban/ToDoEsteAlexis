@@ -1,22 +1,14 @@
 package com.estealexis.todoestealexis.tracklist
 
-import java.io.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class Task(id: String,title: String, description: String = "") : Serializable {
-
-    val id: String = id
-    val title: String = title
-    val description: String = description
-
-    fun getTaskTitle(): String {
-        return this.title
-    }
-
-    fun getTaskId(): String {
-        return this.id
-    }
-    fun getTaskDescription(): String {
-        return this.description
-    }
-
-}
+@Serializable
+data class Task(
+    @SerialName("id")
+    val id: String,
+    @SerialName("title")
+    val title: String,
+    @SerialName("description")
+    val description: String? = ""
+) : java.io.Serializable
