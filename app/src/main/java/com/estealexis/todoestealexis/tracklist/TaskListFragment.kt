@@ -1,5 +1,7 @@
 package com.estealexis.todoestealexis.tracklist
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,23 +49,29 @@ class TaskListFragment : Fragment(){
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener(){
-            val intent = Intent(activity, TaskActivity::class.java)
-            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+            startForResult.launch(Intent(activity, TaskActivity::class.java))
         }
     }
+    private val startForResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        val task = result.data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+                        val position = taskList.indexOfFirst { it.id == task.id}
+                        if(position != -1){
+                            taskList[position] = task
+                        }else{
+                            taskList.add(task)
+                        }
+                        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
+                        recyclerView?.adapter?.notifyDataSetChanged()
+                    }
+                    RESULT_CANCELED -> {
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-        val position = taskList.indexOfFirst { it.id == task.id}
-        if(position != -1){
-            taskList[position] = task
-        }else{
-            taskList.add(task)
-        }
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView?.adapter?.notifyDataSetChanged()
-    }
+                    } else -> {
+                } }
+            }
+
 
     private val taskList = mutableListOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
