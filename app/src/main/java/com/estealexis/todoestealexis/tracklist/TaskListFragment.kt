@@ -71,10 +71,6 @@ class TaskListFragment : Fragment(){
 
         })
 
-
-
-
-
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener(){
             val intent = Intent(activity, TaskActivity::class.java)
