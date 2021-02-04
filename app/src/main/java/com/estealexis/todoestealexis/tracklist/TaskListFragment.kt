@@ -81,7 +81,7 @@ class TaskListFragment : Fragment(){
 
         profil.setOnClickListener({
             val intent = Intent(activity, UserInfoActivity::class.java)
-            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+            startActivity(intent)
         })
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

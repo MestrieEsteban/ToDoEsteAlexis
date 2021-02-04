@@ -26,7 +26,6 @@ class TaskListAdapter(private val taskList: MutableList<Task>):
 
                     val bb = itemView.findViewById<ImageButton>(R.id.imageButton)
                     bb.setOnClickListener {
-                        println("dqsqsdqsdqsd")
                         onDeleteTask?.invoke(task)
                     }
 
