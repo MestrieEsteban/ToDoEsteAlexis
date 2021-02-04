@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,8 +33,7 @@ class TaskListFragment : Fragment(){
         return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
 
-    private val tasksRepository = TasksRepository()
-
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
@@ -41,7 +41,7 @@ class TaskListFragment : Fragment(){
             val userInfo = Api.userService.getInfo().body()!!
             val infoUser = view?.findViewById<TextView>(R.id.userInfoText)
             infoUser?.text = "${userInfo.firstName} ${userInfo.lastName}"
-            tasksRepository.refresh()
+            viewModel.loadTasks()
         }
 
     }
@@ -53,12 +53,12 @@ class TaskListFragment : Fragment(){
         recyclerView.layoutManager =  LinearLayoutManager(activity)
         recyclerView.adapter =  TaskListAdapter(taskList)
 
-        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
+        viewModel.taskList.observe(viewLifecycleOwner, Observer {
             recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
 
             (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
                 lifecycleScope.launch {
-                    tasksRepository.deleteTask(task)
+                    viewModel.deleteTask(task)
                 }
                 recyclerView.adapter?.notifyDataSetChanged()
             }
@@ -68,12 +68,7 @@ class TaskListFragment : Fragment(){
                 intent.putExtra("editedTask", task)
                 startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
             }
-
         })
-
-
-
-
 
         val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         fab.setOnClickListener(){
@@ -86,7 +81,7 @@ class TaskListFragment : Fragment(){
         val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
         val isUpdate = data?.getSerializableExtra("isUpdate")
         lifecycleScope.launch {
-            if(isUpdate === null){ tasksRepository.addTask(task) } else { tasksRepository.updateTask(task) }
+            if(isUpdate === null){ viewModel.addTask(task) } else { viewModel.updateTask(task) }
         }
     }
 
@@ -95,52 +90,4 @@ class TaskListFragment : Fragment(){
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3", description = "description 3")
     )
-}
-
-
-class TaskListAdapter(private val taskList: MutableList<Task> ) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
-    var onDeleteTask: ((Task) -> Unit)? = null
-    var onEditTask: ((Task) -> Unit)? = null
-
-    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(task: Task) {
-            itemView.apply {
-                val test = itemView.findViewById<TextView>(R.id.task_title)
-                test.text = task.title
-                if(task.description != ""){
-                    test.text = "${test.text} \n ${task.description}"
-                }
-
-                var bb = itemView.findViewById<ImageButton>(R.id.imageButton)
-                bb.setOnClickListener {
-                    println("dqsqsdqsdqsd")
-                    onDeleteTask?.invoke(task)
-                }
-
-                var editButton = itemView.findViewById<ImageButton>(R.id.imageButton3)
-                editButton.setOnClickListener{
-                    onEditTask?.invoke(task)
-                }
-            }
-
-        }
-
-    }
-
-
-
-    override fun getItemCount(): Int {
-        return this.taskList.count()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListAdapter.TaskViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(taskList[position])
-    }
-
-
 }
