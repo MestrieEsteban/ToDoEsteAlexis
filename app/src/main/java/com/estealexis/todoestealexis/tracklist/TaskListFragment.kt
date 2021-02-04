@@ -1,6 +1,7 @@
 package com.estealexis.todoestealexis.tracklist
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +20,11 @@ import com.estealexis.todoestealexis.network.Api
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.estealexis.todoestealexis.userinfo.UserInfoActivity
+import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-
+import okhttp3.MultipartBody
+import kotlin.jvm.internal.Intrinsics
 
 
 class TaskListFragment : Fragment(){
@@ -35,16 +38,17 @@ class TaskListFragment : Fragment(){
     }
 
     private val viewModel: TaskListViewModel by viewModels()
+    private val userViewModel: UserInfoViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
+            val userInfo = Api.userWebService.getInfo().body()
             val infoUser = view?.findViewById<TextView>(R.id.userInfoText)
             val profil = view?.findViewById<ImageView>(R.id.profile_image)
-            infoUser?.text = "${userInfo.firstName} ${userInfo.lastName}"
+            infoUser?.text = "${userInfo?.firstName} ${userInfo?.lastName}"
             viewModel.loadTasks()
-            profil?.load(userInfo.avatar)
+            profil?.load(userInfo?.avatar)
         }
     }
 
