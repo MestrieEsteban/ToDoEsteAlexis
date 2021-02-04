@@ -43,8 +43,8 @@ object Api {
         .addConverterFactory(converterFactory)
         .build()
 
-    val userService: UserService by lazy {
-        retrofit.create(UserService::class.java)
+    val userWebService: UserWebService by lazy {
+        retrofit.create(UserWebService::class.java)
     }
 
     val tasksWebService: TasksWebService by lazy {

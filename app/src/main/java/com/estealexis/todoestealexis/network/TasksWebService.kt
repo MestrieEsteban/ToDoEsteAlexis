@@ -21,15 +21,3 @@ interface TasksWebService {
     @PATCH("tasks/{id}")
     suspend fun updateTask(@Body task: Task, @Path("id") id: String? = task.id): Response<Task>
 }
-
-@Serializable
-data class Task(
-    @SerialName("id")
-    val id: String,
-    @SerialName("title")
-    val title: String,
-    @SerialName("description")
-    val description: String,
-    @SerialName("due_date")
-    val due_date: String
-)
