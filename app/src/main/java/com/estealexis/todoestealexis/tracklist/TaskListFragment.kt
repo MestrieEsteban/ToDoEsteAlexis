@@ -44,10 +44,8 @@ class TaskListFragment : Fragment(){
             val profil = view?.findViewById<ImageView>(R.id.profile_image)
             infoUser?.text = "${userInfo.firstName} ${userInfo.lastName}"
             viewModel.loadTasks()
-            profil?.load("https://goo.gl/gEgYUd")
-
+            profil?.load(userInfo.avatar)
         }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
