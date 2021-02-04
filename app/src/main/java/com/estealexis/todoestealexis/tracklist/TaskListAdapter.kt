@@ -4,15 +4,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
 
-class TaskListAdapter(private val taskList: MutableList<Task> ) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class TaskListAdapter(private val taskList: MutableList<Task>):
+        ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
         var onDeleteTask: ((Task) -> Unit)? = null
         var onEditTask: ((Task) -> Unit)? = null
 
-        inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             fun bind(task: Task) {
                 itemView.apply {
                     val test = itemView.findViewById<TextView>(R.id.task_title)
@@ -52,5 +55,9 @@ class TaskListAdapter(private val taskList: MutableList<Task> ) : RecyclerView.A
             holder.bind(taskList[position])
         }
 
+    object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
+        override fun areItemsTheSame(oldItem: Task, newItem: Task) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Task, newItem: Task) = oldItem == newItem
+    }
 
 }
