@@ -37,12 +37,12 @@ class UserInfoActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = UserInfoBinding.inflate(layoutInflater);
         setContentView(binding.root)
-        binding.takePictureButton.setOnClickListener({
-                takePictures()
-        })
-        binding.uploadImageButton.setOnClickListener({
+        binding.takePictureButton.setOnClickListener {
+            takePictures()
+        }
+        binding.uploadImageButton.setOnClickListener {
             pickInGallery()
-        })
+        }
         userViewModel.user.observe(this, { userInfo ->
             binding.editFirstname.setText(userInfo.firstName)
             binding.editLastname.setText(userInfo.lastName)
@@ -50,22 +50,18 @@ class UserInfoActivity: AppCompatActivity() {
             binding.imageView.load(userInfo.avatar)
         })
 
-        binding.btnEditInfo.setOnClickListener({
+        binding.btnEditInfo.setOnClickListener {
             val firstName = binding.editFirstname.text.toString()
             val lastName = binding.editFirstname.text.toString()
             val email = binding.editEmail.text.toString()
-            if (firstName.isEmpty() && lastName.isEmpty() && email.isEmpty())
-                Toast.makeText(this, "Vous devez au moins avoir un titre", Toast.LENGTH_LONG).show()
-            else {
-                userViewModel.updateUser(
-                    UserInfo(
-                        firstName = firstName,
-                        lastName = lastName,
-                        email = email
-                    )
+            userViewModel.updateUser(
+                UserInfo(
+                    firstName = firstName,
+                    lastName = lastName,
+                    email = email
                 )
-            }
-        })
+            )
+        }
     }
 
     override fun onResume() {
