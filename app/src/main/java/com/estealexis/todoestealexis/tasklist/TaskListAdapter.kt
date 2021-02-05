@@ -1,6 +1,7 @@
 package com.estealexis.todoestealexis.tasklist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,14 +15,10 @@ class TaskListAdapter:
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(task: Task) {
-                    binding.taskTitle.text = task.title
-                    if(task.description != ""){
-                        binding.taskTitle.text = "${binding.taskTitle.text} \n ${task.description}"
-                    }
+                    binding.task = task
                     binding.imageButton.setOnClickListener {
                         onDeleteTask?.invoke(task)
                     }
-
                     binding.imageButton3.setOnClickListener{
                         onEditTask?.invoke(task)
                 }
