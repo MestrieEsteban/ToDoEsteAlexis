@@ -27,4 +27,12 @@ class UserInfoViewModel : ViewModel() {
                 _user.value = userInfo!!;
         }
     }
+
+    fun updateUser(user: UserInfo) {
+        viewModelScope.launch {
+            val userInfo: UserInfo? = repository.updateUser(user);
+            if (userInfo != null)
+                _user.value = userInfo!!;
+        }
+    }
 }

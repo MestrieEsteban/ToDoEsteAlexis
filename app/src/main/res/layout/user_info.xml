@@ -7,19 +7,50 @@
     tools:context=".userinfo.UserInfoActivity">
 
     <LinearLayout
-        android:layout_width="382dp"
-        android:layout_height="586dp"
+        android:layout_width="406dp"
+        android:layout_height="618dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.037">
+
+        <EditText
+            android:id="@+id/editLastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Firstname"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editFirstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Lastname"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="335dp"
-        android:layout_height="104dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="358dp"
+        android:layout_height="189dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +58,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.963">
+
+        <Button
+            android:id="@+id/btn_edit_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6C6F9F"
+            android:text="Edit Info" />
 
         <Button
             android:id="@+id/upload_image_button"
