@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.preference.PreferenceManager
-import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.estealexis.todoestealexis.databinding.LoginFragmentBinding
 import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
 
