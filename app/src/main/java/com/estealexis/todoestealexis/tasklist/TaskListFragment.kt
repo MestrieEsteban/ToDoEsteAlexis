@@ -40,10 +40,8 @@ class TaskListFragment : Fragment(){
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()
-            binding.userInfoText?.text = "${userInfo?.firstName} ${userInfo?.lastName}"
+            userViewModel.loadInfo()
             taskviewModel.loadTasks()
-            binding.profileImage?.load(userInfo?.avatar)
         }
     }
 
@@ -55,6 +53,11 @@ class TaskListFragment : Fragment(){
 
         taskviewModel.taskList.observe(viewLifecycleOwner, Observer {
             taskListAdapter.submitList(it)
+        })
+
+        userViewModel.user.observe(viewLifecycleOwner, { userinfo ->
+            binding.userInfoText.text = "${userinfo.firstName} ${userinfo.lastName}"
+            binding.profileImage?.load(userinfo.avatar)
         })
 
         taskListAdapter.onDeleteTask = {
