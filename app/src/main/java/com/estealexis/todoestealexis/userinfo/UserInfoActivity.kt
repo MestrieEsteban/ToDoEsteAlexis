@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.estealexis.todoestealexis.BuildConfig
 import com.estealexis.todoestealexis.databinding.UserInfoBinding
 import com.estealexis.todoestealexis.network.UserInfo
@@ -22,7 +20,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import java.net.URI
 
 
 class UserInfoActivity: AppCompatActivity() {
