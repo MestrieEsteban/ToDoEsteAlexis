@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 class TaskListFragment : Fragment(){
-    private val viewModel: TaskListViewModel by viewModels()
+    private val taskviewModel: TaskListViewModel by viewModels()
     private val userViewModel: UserInfoViewModel by viewModels()
     private lateinit var binding: FragmentTaskListBinding
     private lateinit var taskListAdapter: TaskListAdapter
@@ -42,7 +42,7 @@ class TaskListFragment : Fragment(){
         lifecycleScope.launch {
             val userInfo = Api.userWebService.getInfo().body()
             binding.userInfoText?.text = "${userInfo?.firstName} ${userInfo?.lastName}"
-            viewModel.loadTasks()
+            taskviewModel.loadTasks()
             binding.profileImage?.load(userInfo?.avatar)
         }
     }
@@ -53,12 +53,12 @@ class TaskListFragment : Fragment(){
         binding.recyclerView.layoutManager =  LinearLayoutManager(activity)
         binding.recyclerView.adapter =  taskListAdapter
 
-        viewModel.taskList.observe(viewLifecycleOwner, Observer {
+        taskviewModel.taskList.observe(viewLifecycleOwner, Observer {
             taskListAdapter.submitList(it)
         })
 
         taskListAdapter.onDeleteTask = {
-            viewModel.deleteTask(it)
+            taskviewModel.deleteTask(it)
         }
 
         taskListAdapter.onEditTask = {
@@ -82,7 +82,7 @@ class TaskListFragment : Fragment(){
         val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
         val isUpdate = data?.getSerializableExtra("isUpdate")
         lifecycleScope.launch {
-            if(isUpdate === null){ viewModel.addTask(task) } else { viewModel.updateTask(task) }
+            if(isUpdate === null){ taskviewModel.addTask(task) } else { taskviewModel.updateTask(task) }
         }
     }
 }
