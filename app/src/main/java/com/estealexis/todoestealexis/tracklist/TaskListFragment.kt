@@ -1,89 +1,79 @@
 package com.estealexis.todoestealexis.tracklist
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.estealexis.todoestealexis.R
+import com.estealexis.todoestealexis.databinding.FragmentTaskListBinding
 import com.estealexis.todoestealexis.network.Api
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.estealexis.todoestealexis.userinfo.UserInfoActivity
 import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import kotlin.jvm.internal.Intrinsics
 
 
 class TaskListFragment : Fragment(){
+    private val viewModel: TaskListViewModel by viewModels()
+    private val userViewModel: UserInfoViewModel by viewModels()
+    private lateinit var binding: FragmentTaskListBinding
+    private lateinit var taskListAdapter: TaskListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
 
-    ): View? {
-        return inflater.inflate(R.layout.fragment_task_list, container, false)
+    ): View {
+        binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
-    private val viewModel: TaskListViewModel by viewModels()
-    private val userViewModel: UserInfoViewModel by viewModels()
 
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
             val userInfo = Api.userWebService.getInfo().body()
-            val infoUser = view?.findViewById<TextView>(R.id.userInfoText)
-            val profil = view?.findViewById<ImageView>(R.id.profile_image)
-            infoUser?.text = "${userInfo?.firstName} ${userInfo?.lastName}"
+            binding.userInfoText?.text = "${userInfo?.firstName} ${userInfo?.lastName}"
             viewModel.loadTasks()
-            profil?.load(userInfo?.avatar)
+            binding.profileImage?.load(userInfo?.avatar)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val profil = view?.findViewById<ImageView>(R.id.profile_image)
-
-        recyclerView.layoutManager =  LinearLayoutManager(activity)
-        recyclerView.adapter =  TaskListAdapter(taskList)
+        binding.recyclerView.layoutManager =  LinearLayoutManager(activity)
+        binding.recyclerView.adapter =  taskListAdapter
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer {
-            recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
+            binding.recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
 
-            (recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
+            (binding.recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
                 lifecycleScope.launch {
                     viewModel.deleteTask(task)
                 }
-                recyclerView.adapter?.notifyDataSetChanged()
+                binding.recyclerView.adapter?.notifyDataSetChanged()
             }
 
-            (recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
+            (binding.recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
                 val intent = Intent(activity, TaskActivity::class.java)
                 intent.putExtra("editedTask", task)
                 startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
             }
         })
 
-        val fab = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        fab.setOnClickListener(){
+        binding.floatingActionButton2.setOnClickListener(){
             val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
-        profil.setOnClickListener({
+        binding.profileImage.setOnClickListener({
             val intent = Intent(activity, UserInfoActivity::class.java)
             startActivity(intent)
         })

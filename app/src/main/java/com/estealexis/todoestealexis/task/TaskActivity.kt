@@ -2,42 +2,38 @@ package com.estealexis.todoestealexis.task
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.estealexis.todoestealexis.R
+import com.estealexis.todoestealexis.databinding.AssTaskBinding
 import com.estealexis.todoestealexis.tracklist.Task
 import java.util.*
 
 class TaskActivity: AppCompatActivity(){
+    private lateinit var binding: AssTaskBinding
+
     companion object {
         const val ADD_TASK_REQUEST_CODE = 666
         const val TASK_KEY = "task"
         const val TASK_KEY2 = "editedTask"
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.ass_task)
+        binding = AssTaskBinding.inflate(layoutInflater);
+        setContentView(binding.root)
         val editedTask = intent.getSerializableExtra(TASK_KEY2) as? Task
-
-        val title = findViewById<EditText>(R.id.editTitle)
-        val description = findViewById<EditText>(R.id.editDescription)
         val myTitle = if (editedTask?.title == "") "" else editedTask?.title
         val myDescription = if (editedTask?.description == "") "" else editedTask?.description
-        title.setText(myTitle)
-        description.setText(myDescription)
-        var valid = findViewById<Button>(R.id.button)
-        valid.setOnClickListener {
+        binding.editTitle.setText(myTitle)
+        binding.editDescription.setText(myDescription)
+        binding.button.setOnClickListener {
             val resultIntent = Intent()
             val taskId = if (editedTask?.id == "") UUID.randomUUID().toString() else editedTask?.id
-            val task = Task(id = "$taskId", title = "${title.text}", description = "${description.text}")
+            val task = Task(id = "$taskId", title = "${binding.editTitle.text}", description = "${binding.editDescription.text}")
             val isUpdate = if (editedTask?.title == "") "" else editedTask?.title
             resultIntent.putExtra("task", task)
             resultIntent.putExtra("isUpdate", isUpdate)
             setResult(RESULT_OK, resultIntent)
             finish()
         }
-
-
     }
 }

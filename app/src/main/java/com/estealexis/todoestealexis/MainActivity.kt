@@ -1,10 +1,7 @@
 package com.estealexis.todoestealexis
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import com.estealexis.todoestealexis.tracklist.Task
-import java.util.*
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

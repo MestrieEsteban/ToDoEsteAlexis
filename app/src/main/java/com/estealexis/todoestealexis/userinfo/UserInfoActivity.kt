@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -15,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.estealexis.todoestealexis.BuildConfig
-import com.estealexis.todoestealexis.R
+import com.estealexis.todoestealexis.databinding.UserInfoBinding
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -24,6 +22,7 @@ import java.io.File
 
 class UserInfoActivity: AppCompatActivity() {
 
+    private lateinit var binding: UserInfoBinding;
     private fun openCamera() = takePicture.launch(photoUri)
     private fun pickPicture() = pickInGallery.launch("image/*")
 
@@ -31,19 +30,15 @@ class UserInfoActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_info)
-        val takePicture =findViewById<Button>(R.id.take_picture_button)
-        takePicture.setOnClickListener({
+        binding = UserInfoBinding.inflate(layoutInflater);
+        setContentView(binding.root)
+        binding.takePictureButton.setOnClickListener({
                 takePictures()
         })
-        val upload_image =findViewById<Button>(R.id.upload_image_button)
-        upload_image.setOnClickListener({
+        binding.uploadImageButton.setOnClickListener({
             pickInGallery()
         })
-
     }
-
-
 
     fun takePictures() {
         askCameraPermissionAndOpenCamera()

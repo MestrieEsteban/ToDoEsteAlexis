@@ -1,9 +1,6 @@
 package com.estealexis.todoestealexis.network
 
 import com.estealexis.todoestealexis.tracklist.Task
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
