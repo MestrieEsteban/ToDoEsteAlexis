@@ -1,4 +1,4 @@
-package com.estealexis.todoestealexis.tracklist
+package com.estealexis.todoestealexis.tasklist
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

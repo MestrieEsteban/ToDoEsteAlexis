@@ -1,6 +1,6 @@
 package com.estealexis.todoestealexis.network
 
-import com.estealexis.todoestealexis.tracklist.Task
+import com.estealexis.todoestealexis.tasklist.Task
 import retrofit2.Response
 import retrofit2.http.*
 

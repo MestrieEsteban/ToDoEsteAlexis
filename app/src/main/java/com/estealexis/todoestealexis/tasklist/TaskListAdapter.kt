@@ -1,4 +1,4 @@
-package com.estealexis.todoestealexis.tracklist
+package com.estealexis.todoestealexis.tasklist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.ItemTaskBinding
 
-class TaskListAdapter(private val taskList: MutableList<Task>):
+class TaskListAdapter:
         ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
         var onDeleteTask: ((Task) -> Unit)? = null
         var onEditTask: ((Task) -> Unit)? = null
@@ -20,14 +20,11 @@ class TaskListAdapter(private val taskList: MutableList<Task>):
                     if(task.description != ""){
                         binding.taskTitle.text = "${binding.taskTitle.text} \n ${task.description}"
                     }
-
-                    val bb = itemView.findViewById<ImageButton>(R.id.imageButton)
-                    bb.setOnClickListener {
+                    binding.imageButton.setOnClickListener {
                         onDeleteTask?.invoke(task)
                     }
 
-                    val editButton = itemView.findViewById<ImageButton>(R.id.imageButton3)
-                    editButton.setOnClickListener{
+                    binding.imageButton3.setOnClickListener{
                         onEditTask?.invoke(task)
                 }
             }

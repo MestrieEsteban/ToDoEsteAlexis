@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.estealexis.todoestealexis.databinding.AssTaskBinding
-import com.estealexis.todoestealexis.tracklist.Task
+import com.estealexis.todoestealexis.tasklist.Task
 import java.util.*
 
 class TaskActivity: AppCompatActivity(){

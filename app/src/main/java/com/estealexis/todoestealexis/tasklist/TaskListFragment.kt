@@ -1,4 +1,4 @@
-package com.estealexis.todoestealexis.tracklist
+package com.estealexis.todoestealexis.tasklist
 
 import android.content.Intent
 import android.os.Bundle
@@ -26,6 +26,7 @@ class TaskListFragment : Fragment(){
     private lateinit var binding: FragmentTaskListBinding
     private lateinit var taskListAdapter: TaskListAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,25 +49,23 @@ class TaskListFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        taskListAdapter = TaskListAdapter()
         binding.recyclerView.layoutManager =  LinearLayoutManager(activity)
         binding.recyclerView.adapter =  taskListAdapter
 
         viewModel.taskList.observe(viewLifecycleOwner, Observer {
-            binding.recyclerView.adapter =  TaskListAdapter(it as MutableList<Task>)
-
-            (binding.recyclerView.adapter as TaskListAdapter).onDeleteTask = { task ->
-                lifecycleScope.launch {
-                    viewModel.deleteTask(task)
-                }
-                binding.recyclerView.adapter?.notifyDataSetChanged()
-            }
-
-            (binding.recyclerView.adapter as TaskListAdapter).onEditTask = { task ->
-                val intent = Intent(activity, TaskActivity::class.java)
-                intent.putExtra("editedTask", task)
-                startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
-            }
+            taskListAdapter.submitList(it)
         })
+
+        taskListAdapter.onDeleteTask = {
+            viewModel.deleteTask(it)
+        }
+
+        taskListAdapter.onEditTask = {
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra("editedTask", it)
+            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+        }
 
         binding.floatingActionButton2.setOnClickListener(){
             val intent = Intent(activity, TaskActivity::class.java)
