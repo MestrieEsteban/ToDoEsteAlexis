@@ -1,21 +1,31 @@
 package com.estealexis.todoestealexis.network
 
+import android.app.Application
+import android.content.Context
+import androidx.preference.PreferenceManager
+import com.estealexis.todoestealexis.auth.SHARED_PREF_TOKEN_KEY
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-object Api {
+class Api( val context: Context)
+{
 
     // constantes qui serviront à faire les requêtes
-    private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
-    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0ODAsImV4cCI6MTY0MzQ0NzA3N30.IFBGtXXO_hHWXgwL3G2CCANx455FVjbWGwSe2B-RJEo"
-
+    companion object {
+        private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
+        lateinit var INSTANCE: Api
+    }
     // on construit une instance de parseur de JSON:
     private val jsonSerializer = Json {
         ignoreUnknownKeys = true
         coerceInputValues = true
+    }
+
+    private fun getToken(): String? {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
     }
 
     // instance de convertisseur qui parse le JSON renvoyé par le serveur:
@@ -29,7 +39,7 @@ object Api {
             .addInterceptor { chain ->
                 // intercepteur qui ajoute le `header` d'authentification avec votre token:
                 val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $TOKEN")
+                    .addHeader("Authorization", "Bearer ${getToken()}")
                     .build()
                 chain.proceed(newRequest)
             }
@@ -49,5 +59,12 @@ object Api {
 
     val tasksWebService: TasksWebService by lazy {
         retrofit.create(TasksWebService::class.java)
+    }
+}
+
+class App: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Api.INSTANCE = Api(this)
     }
 }

@@ -5,7 +5,7 @@ import com.estealexis.todoestealexis.auth.LoginResponse
 import okhttp3.MultipartBody
 
 class UserInfoRepository {
-    private val webService = Api.userWebService
+    private val webService = Api.INSTANCE.userWebService
 
     suspend fun loadInfo(): UserInfo? {
         val response = webService.getInfo()
