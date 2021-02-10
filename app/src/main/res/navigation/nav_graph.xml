@@ -7,15 +7,33 @@
     <fragment
         android:id="@+id/AuthenticationFragment"
         android:name="com.estealexis.todoestealexis.auth.AuthenticationFragment"
-        android:label="AuthenticationFragment" />
+        android:label="AuthenticationFragment"
+        tools:layout="@layout/authentication_fragment" >
+        <action
+            android:id="@+id/action_AuthenticationFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_AuthenticationFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.estealexis.todoestealexis.auth.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_taskListFragment2"
+            app:destination="@id/taskListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.estealexis.todoestealexis.auth.SignupFragment"
-        android:label="SignupFragment" />
+        android:label="SignupFragment"
+        tools:layout="@layout/signup_fragment" >
+        <action
+            android:id="@+id/action_signupFragment_to_taskListFragment2"
+            app:destination="@id/taskListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/taskListFragment"
         android:name="com.estealexis.todoestealexis.tasklist.TaskListFragment"
