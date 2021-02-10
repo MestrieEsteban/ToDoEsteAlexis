@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.estealexis.todoestealexis.auth.SHARED_PREF_TOKEN_KEY
 import com.estealexis.todoestealexis.databinding.FragmentTaskListBinding
-import com.estealexis.todoestealexis.network.Api
 import com.estealexis.todoestealexis.task.TaskActivity
 import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.estealexis.todoestealexis.userinfo.UserInfoActivity
@@ -53,6 +54,7 @@ class TaskListFragment : Fragment(){
 
         taskviewModel.taskList.observe(viewLifecycleOwner, Observer {
             taskListAdapter.submitList(it)
+            binding.recyclerView.adapter =  taskListAdapter
         })
 
         userViewModel.user.observe(viewLifecycleOwner, { userinfo ->

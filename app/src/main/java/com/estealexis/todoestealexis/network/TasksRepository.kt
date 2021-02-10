@@ -5,7 +5,7 @@ import com.estealexis.todoestealexis.network.Api
 import com.estealexis.todoestealexis.tasklist.Task
 
 class TasksRepository {
-    private val tasksWebService = Api.tasksWebService
+    private val tasksWebService = Api.INSTANCE.tasksWebService
     private val _taskList = MutableLiveData<List<Task>>()
     val taskList: LiveData<List<Task>> = _taskList
 

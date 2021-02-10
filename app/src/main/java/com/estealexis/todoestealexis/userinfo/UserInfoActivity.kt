@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.estealexis.todoestealexis.BuildConfig
 import com.estealexis.todoestealexis.databinding.UserInfoBinding
+import com.estealexis.todoestealexis.network.UserInfo
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,12 +34,36 @@ class UserInfoActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = UserInfoBinding.inflate(layoutInflater);
         setContentView(binding.root)
-        binding.takePictureButton.setOnClickListener({
-                takePictures()
-        })
-        binding.uploadImageButton.setOnClickListener({
+        binding.takePictureButton.setOnClickListener {
+            takePictures()
+        }
+        binding.uploadImageButton.setOnClickListener {
             pickInGallery()
+        }
+        userViewModel.user.observe(this, { userInfo ->
+            binding.editFirstname.setText(userInfo.firstName)
+            binding.editLastname.setText(userInfo.lastName)
+            binding.editEmail.setText(userInfo.email)
+            binding.imageView.load(userInfo.avatar)
         })
+
+        binding.btnEditInfo.setOnClickListener {
+            val firstName = binding.editFirstname.text.toString()
+            val lastName = binding.editFirstname.text.toString()
+            val email = binding.editEmail.text.toString()
+            userViewModel.updateUser(
+                UserInfo(
+                    firstName = firstName,
+                    lastName = lastName,
+                    email = email
+                )
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userViewModel.loadInfo()
     }
 
     fun takePictures() {
@@ -48,7 +74,6 @@ class UserInfoActivity: AppCompatActivity() {
         askGalleryPermissionAndPickInGallery()
     }
 
-    // create a temp file and get a uri for it
     private val photoUri by lazy {
         FileProvider.getUriForFile(
             this,
@@ -78,6 +103,7 @@ class UserInfoActivity: AppCompatActivity() {
 
     private fun handleImage(toUri: Uri) {
         lifecycleScope.launch {
+            binding.imageView.setImageURI(toUri)
             userViewModel.updateAvatar(convert(toUri))
         }
     }
