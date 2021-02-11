@@ -2,6 +2,8 @@ package com.estealexis.todoestealexis.network
 
 import com.estealexis.todoestealexis.auth.LoginForm
 import com.estealexis.todoestealexis.auth.LoginResponse
+import com.estealexis.todoestealexis.auth.SignUpForm
+import com.estealexis.todoestealexis.auth.SignUpResponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -21,6 +23,6 @@ interface UserWebService {
     suspend fun login(@Body user: LoginForm): Response<LoginResponse>
 
     @POST("users/sign_up")
-    suspend fun signUp(@Body user: LoginForm): Response<LoginResponse>
+    suspend fun signUp(@Body user: SignUpForm): Response<SignUpResponse>
 }
 

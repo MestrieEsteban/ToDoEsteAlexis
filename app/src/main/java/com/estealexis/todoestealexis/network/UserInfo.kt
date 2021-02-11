@@ -12,5 +12,5 @@ data class UserInfo(
     @SerialName("lastname")
     val lastName: String,
     @SerialName("avatar")
-    val avatar: String = ""
+    val avatar: String = "https://i0.wp.com/wealmedia.com/wp-content/uploads/2015/06/google-plus-profile-template.jpg"
 )

@@ -1,6 +1,5 @@
 package com.estealexis.todoestealexis.auth
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,11 +38,11 @@ class LoginFragment : Fragment() {
                 user.password = binding.loginPassword.text.toString()
                 userViewModel.login(user)
                 userViewModel.token.observe(viewLifecycleOwner, {
-                    if (it == "null") {
+                    if (it.token == "") {
                         Toast.makeText(context, "Password or Email Incorrect", Toast.LENGTH_LONG)
                             .show()
                     } else {
-                        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it).commit()
+                        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it.token).commit()
                         findNavController().navigate(R.id.taskListFragment)
                     }
                 })

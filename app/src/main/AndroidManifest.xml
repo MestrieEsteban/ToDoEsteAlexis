@@ -14,14 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDoEsteAlexis"
         android:name=".network.App">
-        <activity android:name=".AuthenticationActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.estealexis.todoestealexis.task.TaskActivity">
+        <activity android:name="com.estealexis.todoestealexis.task.TaskFragment">
         </activity>
         <activity android:name="com.estealexis.todoestealexis.userinfo.UserInfoActivity">
         </activity>

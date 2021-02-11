@@ -6,11 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SignUpForm(
     @SerialName("firstname")
-    val firstname: String,
+    var firstname: String = "",
     @SerialName("lastname")
-    val lastname: String,
+    var lastname: String = "",
     @SerialName("email")
-    val email: String,
+    var email: String = "",
     @SerialName("password")
-    val password: String
+    var password: String = "",
+    @SerialName("password_confirmation")
+    var password_confirmation: String = ""
 ) : java.io.Serializable

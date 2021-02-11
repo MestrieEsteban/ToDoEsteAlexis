@@ -2,12 +2,12 @@ package com.estealexis.todoestealexis.task
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.estealexis.todoestealexis.databinding.AssTaskBinding
 import com.estealexis.todoestealexis.tasklist.Task
 import java.util.*
 
-class TaskActivity: AppCompatActivity(){
+class TaskFragment: FragmentActivity(){
     private lateinit var binding: AssTaskBinding
 
     companion object {

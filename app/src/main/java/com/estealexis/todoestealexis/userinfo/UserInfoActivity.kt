@@ -1,7 +1,6 @@
 package com.estealexis.todoestealexis.userinfo
 
 import android.Manifest
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -13,8 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import coil.load
 import com.estealexis.todoestealexis.BuildConfig
@@ -25,9 +27,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import androidx.navigation.fragment.findNavController
-
-
 
 class UserInfoActivity: AppCompatActivity() {
 
@@ -47,7 +46,7 @@ class UserInfoActivity: AppCompatActivity() {
         binding.uploadImageButton.setOnClickListener {
             pickInGallery()
         }
-        userViewModel.user.observe(this, { userInfo ->
+        userViewModel.login_user.observe(this, { userInfo ->
             binding.editFirstname.setText(userInfo.firstName)
             binding.editLastname.setText(userInfo.lastName)
             binding.editEmail.setText(userInfo.email)
@@ -66,10 +65,10 @@ class UserInfoActivity: AppCompatActivity() {
                 )
             )
         }
-        binding.btnLogout.setOnClickListener({
-          PreferenceManager.getDefaultSharedPreferences(this).edit().clear()?.commit()
-            //findNavController(view).navigate(R.id.AuthenticationFragment)
-        })
+        binding.btnLogout.setOnClickListener {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().clear()?.commit()
+            //findNavController().navigate(R.id.AuthenticationFragment)
+        }
     }
     override fun onResume() {
         super.onResume()

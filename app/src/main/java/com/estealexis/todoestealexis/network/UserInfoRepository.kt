@@ -2,6 +2,8 @@ package com.estealexis.todoestealexis.network
 
 import com.estealexis.todoestealexis.auth.LoginForm
 import com.estealexis.todoestealexis.auth.LoginResponse
+import com.estealexis.todoestealexis.auth.SignUpForm
+import com.estealexis.todoestealexis.auth.SignUpResponse
 import okhttp3.MultipartBody
 
 class UserInfoRepository {
@@ -26,9 +28,9 @@ class UserInfoRepository {
         return if (response.isSuccessful) response.body()!! else null
     }
 
-    suspend fun signUp(user: LoginForm): LoginResponse? {
-        val response = webService.signUp(user);
-        return if (response.isSuccessful) response.body()!! else null
+    suspend fun signUp(user: SignUpForm): SignUpResponse? {
+        val response  = webService.signUp(user);
+        return if (response.isSuccessful) response.body()!! else response.body()
     }
 
 
