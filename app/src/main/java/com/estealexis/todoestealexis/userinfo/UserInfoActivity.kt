@@ -37,7 +37,7 @@ class UserInfoActivity: AppCompatActivity() {
 
     private val userViewModel: UserInfoViewModel by viewModels()
 
-    override fun onCreate(view: View, savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = UserInfoBinding.inflate(layoutInflater);
         setContentView(binding.root)
@@ -67,11 +67,8 @@ class UserInfoActivity: AppCompatActivity() {
             )
         }
         binding.btnLogout.setOnClickListener({
-            val sharedPref =
-                    PreferenceManager.getDefaultSharedPreferences(this)
-            var editor: SharedPreferences.Editor? = sharedPref.edit()
-            editor?.clear()?.commit()
-            findNavController(view).navigate(R.id.AuthenticationFragment)
+          PreferenceManager.getDefaultSharedPreferences(this).edit().clear()?.commit()
+            //findNavController(view).navigate(R.id.AuthenticationFragment)
         })
     }
     override fun onResume() {

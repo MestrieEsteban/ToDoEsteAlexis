@@ -23,6 +23,7 @@ class TaskActivity: AppCompatActivity(){
         val editedTask = intent.getSerializableExtra(TASK_KEY2) as? Task
         val myTitle = if (editedTask?.title == "") "" else editedTask?.title
         val myDescription = if (editedTask?.description == "") "" else editedTask?.description
+        if (editedTask?.title != null ) binding.button.text="UPDATE" else binding.button.text="ADD"
         binding.editTitle.setText(myTitle)
         binding.editDescription.setText(myDescription)
         binding.button.setOnClickListener {

@@ -43,11 +43,7 @@ class LoginFragment : Fragment() {
                         Toast.makeText(context, "Password or Email Incorrect", Toast.LENGTH_LONG)
                             .show()
                     } else {
-                        val sharedPref =
-                            PreferenceManager.getDefaultSharedPreferences(context)
-                        var editor: SharedPreferences.Editor? = sharedPref.edit()
-                        editor?.putString(SHARED_PREF_TOKEN_KEY, it)
-                        editor?.commit()
+                        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it).commit()
                         findNavController().navigate(R.id.taskListFragment)
                     }
                 })
