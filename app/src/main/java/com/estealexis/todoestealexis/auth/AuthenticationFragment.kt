@@ -30,11 +30,11 @@ class AuthenticationFragment : Fragment() {
             findNavController().navigate(R.id.taskListFragment)
         }
 
-        binding.btnLogin.setOnClickListener(){
+        binding.btnLogin.setOnClickListener{
             findNavController().navigate(R.id.loginFragment)
         }
 
-        binding.btnSignup.setOnClickListener(){
+        binding.btnSignup.setOnClickListener{
             findNavController().navigate(R.id.signupFragment)
 
         }

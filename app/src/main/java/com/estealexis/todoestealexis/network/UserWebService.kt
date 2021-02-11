@@ -19,5 +19,8 @@ interface UserWebService {
 
     @POST("users/login")
     suspend fun login(@Body user: LoginForm): Response<LoginResponse>
+
+    @POST("users/sign_up")
+    suspend fun signUp(@Body user: LoginForm): Response<LoginResponse>
 }
 

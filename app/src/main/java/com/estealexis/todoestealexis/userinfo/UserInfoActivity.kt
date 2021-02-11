@@ -1,9 +1,11 @@
 package com.estealexis.todoestealexis.userinfo
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -12,14 +14,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import androidx.preference.PreferenceManager
 import coil.load
 import com.estealexis.todoestealexis.BuildConfig
+import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.UserInfoBinding
 import com.estealexis.todoestealexis.network.UserInfo
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import androidx.navigation.fragment.findNavController
+
 
 
 class UserInfoActivity: AppCompatActivity() {
@@ -30,7 +37,7 @@ class UserInfoActivity: AppCompatActivity() {
 
     private val userViewModel: UserInfoViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = UserInfoBinding.inflate(layoutInflater);
         setContentView(binding.root)
@@ -59,8 +66,14 @@ class UserInfoActivity: AppCompatActivity() {
                 )
             )
         }
+        binding.btnLogout.setOnClickListener({
+            val sharedPref =
+                    PreferenceManager.getDefaultSharedPreferences(this)
+            var editor: SharedPreferences.Editor? = sharedPref.edit()
+            editor?.clear()?.commit()
+            findNavController(view).navigate(R.id.AuthenticationFragment)
+        })
     }
-
     override fun onResume() {
         super.onResume()
         userViewModel.loadInfo()

@@ -47,4 +47,11 @@ class UserInfoViewModel : ViewModel() {
             else _token.value = userInfo?.token!!
         }
     }
+
+    fun signUp(user: LoginForm) {
+        viewModelScope.launch {
+            val userInfo: LoginResponse? = repository.signUp(user)
+            println(userInfo)
+        }
+    }
 }

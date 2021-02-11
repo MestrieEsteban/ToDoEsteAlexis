@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.LoginFragmentBinding
 import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
 
@@ -46,7 +48,7 @@ class LoginFragment : Fragment() {
                         var editor: SharedPreferences.Editor? = sharedPref.edit()
                         editor?.putString(SHARED_PREF_TOKEN_KEY, it)
                         editor?.commit()
-                        //println(sharedPref.getString(SHARED_PREF_TOKEN_KEY, ""))
+                        findNavController().navigate(R.id.taskListFragment)
                     }
                 })
             }

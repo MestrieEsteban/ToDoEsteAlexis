@@ -26,5 +26,10 @@ class UserInfoRepository {
         return if (response.isSuccessful) response.body()!! else null
     }
 
+    suspend fun signUp(user: LoginForm): LoginResponse? {
+        val response = webService.signUp(user);
+        return if (response.isSuccessful) response.body()!! else null
+    }
+
 
 }
