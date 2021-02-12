@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.findNavController
 import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.TaskFragmentBinding
@@ -41,15 +42,11 @@ class TaskFragment: Fragment(){
         binding.editTitle.setText(myTitle)
         binding.editDescription.setText(myDescription)
         binding.button.setOnClickListener {
-           // val resultIntent = Intent()
             val taskId = if (editedTask?.id == "") UUID.randomUUID().toString() else editedTask?.id
             val task = Task(id = "$taskId", title = "${binding.editTitle.text}", description = "${binding.editDescription.text}")
-            val isUpdate = if (editedTask?.title == "") "" else editedTask?.title
+            val isUpdate = if (editedTask?.title == "") "test" else editedTask?.title
             val bundle = bundleOf( "task" to task,"isUpdate" to isUpdate)
-            view.findNavController().navigate(R.id.taskFragment, bundle.apply {
-                putInt("fragment:resultCode", RESULT_OK)
-            })            //setResult(RESULT_OK, resultIntent)
-            //finish()
+            view.findNavController().navigate(R.id.taskListFragment, bundle)
         }
     }
 

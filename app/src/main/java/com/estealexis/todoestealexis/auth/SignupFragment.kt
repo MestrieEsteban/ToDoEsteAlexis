@@ -42,7 +42,6 @@ class SignupFragment : Fragment() {
                user.password_confirmation = binding.signupConfPassword.text.toString()
                userViewModel.signUp(user)
                userViewModel.sign_up_user.observe(viewLifecycleOwner, {
-                   println(it);
                    if(it.token != "")
                    {
                        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it.token).commit()
