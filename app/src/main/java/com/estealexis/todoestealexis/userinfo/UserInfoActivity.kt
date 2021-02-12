@@ -55,7 +55,7 @@ class UserInfoActivity: AppCompatActivity() {
 
         binding.btnEditInfo.setOnClickListener {
             val firstName = binding.editFirstname.text.toString()
-            val lastName = binding.editFirstname.text.toString()
+            val lastName = binding.editLastname.text.toString()
             val email = binding.editEmail.text.toString()
             userViewModel.updateUser(
                 UserInfo(

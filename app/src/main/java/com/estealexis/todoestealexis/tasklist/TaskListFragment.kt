@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.estealexis.todoestealexis.databinding.FragmentTaskListBinding
-import com.estealexis.todoestealexis.task.TaskFragment
-import com.estealexis.todoestealexis.task.TaskFragment.Companion.ADD_TASK_REQUEST_CODE
+import com.estealexis.todoestealexis.task.TaskActivity
+import com.estealexis.todoestealexis.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.estealexis.todoestealexis.userinfo.UserInfoActivity
 import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
 import kotlinx.coroutines.launch
@@ -65,13 +65,13 @@ class TaskListFragment : Fragment(){
         }
 
         taskListAdapter.onEditTask = {
-            val intent = Intent(activity, TaskFragment::class.java)
+            val intent = Intent(activity, TaskActivity::class.java)
             intent.putExtra("editedTask", it)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
         binding.floatingActionButton2.setOnClickListener(){
-            val intent = Intent(activity, TaskFragment::class.java)
+            val intent = Intent(activity, TaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
@@ -83,7 +83,7 @@ class TaskListFragment : Fragment(){
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val task = data?.getSerializableExtra(TaskFragment.TASK_KEY) as Task
+        val task = data?.getSerializableExtra(TaskActivity.TASK_KEY) as Task
         val isUpdate = data?.getSerializableExtra("isUpdate")
         lifecycleScope.launch {
             if(isUpdate === null){ taskviewModel.addTask(task) } else { taskviewModel.updateTask(task) }

@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.estealexis.todoestealexis.task.TaskFragment">
+        <activity android:name="com.estealexis.todoestealexis.task.TaskActivity">
         </activity>
         <activity android:name="com.estealexis.todoestealexis.userinfo.UserInfoActivity">
         </activity>
