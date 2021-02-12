@@ -15,12 +15,9 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import coil.load
 import com.estealexis.todoestealexis.BuildConfig
-import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.UserInfoBinding
 import com.estealexis.todoestealexis.network.UserInfo
 import kotlinx.coroutines.launch
