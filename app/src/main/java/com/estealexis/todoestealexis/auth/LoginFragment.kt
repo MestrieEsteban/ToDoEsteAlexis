@@ -47,6 +47,11 @@ class LoginFragment : Fragment() {
                     }
                 })
             }
+            else
+            {
+                Toast.makeText(context, "Tous les information n'ont été saisit", Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 }

@@ -35,26 +35,33 @@ class SignupFragment : Fragment() {
                    binding.signupEmail.text.toString() != "" && binding.signupPassword.text.toString() != ""
                && binding.signupConfPassword.text.toString() != "")
            {
-               val user = SignUpForm()
-               user.firstname = binding.signupFirstname.text.toString()
-               user.lastname = binding.signupLastname.text.toString()
-               user.email = binding.signupEmail.text.toString()
-               user.password = binding.signupPassword.text.toString()
-               user.password_confirmation = binding.signupConfPassword.text.toString()
-               userViewModel.signUp(user)
-               userViewModel.sign_up_user.observe(viewLifecycleOwner, {
-                   println(it);
-                   if(it.token != "")
-                   {
-                       PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it.token).commit()
-                       findNavController().navigate(R.id.loginFragment)
-                   }
-                   else
-                   {
-                       Toast.makeText(context, "Informations Incorrect", Toast.LENGTH_LONG).show()
-                   }
-           })
+               if(binding.signupPassword.text.toString() === binding.signupPassword.toString()) {
+                   val user = SignUpForm()
+                   user.firstname = binding.signupFirstname.text.toString()
+                   user.lastname = binding.signupLastname.text.toString()
+                   user.email = binding.signupEmail.text.toString()
+                   user.password = binding.signupPassword.text.toString()
+                   user.password_confirmation = binding.signupConfPassword.text.toString()
+                   userViewModel.signUp(user)
+                   userViewModel.sign_up_user.observe(viewLifecycleOwner, {
+                       if (it.token != "") {
+                           PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SHARED_PREF_TOKEN_KEY, it.token).commit()
+                           findNavController().navigate(R.id.loginFragment)
+                       } else {
+                           Toast.makeText(context, "Informations Incorrect", Toast.LENGTH_LONG)
+                               .show()
+                       }
+                   })
+               }
+               else
+               {
+                   Toast.makeText(context, "Le password et confirme password ne sont identique", Toast.LENGTH_LONG).show()
+               }
         }
+            else
+           {
+               Toast.makeText(context, "Tous les information n'ont pas été saisit", Toast.LENGTH_LONG).show()
+           }
     }
 }
 }
