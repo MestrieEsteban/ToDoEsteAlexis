@@ -35,7 +35,7 @@ class SignupFragment : Fragment() {
                    binding.signupEmail.text.toString() != "" && binding.signupPassword.text.toString() != ""
                && binding.signupConfPassword.text.toString() != "")
            {
-               if(binding.signupPassword.text.toString() === binding.signupPassword.toString()) {
+               if(binding.signupPassword.text.toString().equals(binding.signupConfPassword.text.toString())) {
                    val user = SignUpForm()
                    user.firstname = binding.signupFirstname.text.toString()
                    user.lastname = binding.signupLastname.text.toString()
