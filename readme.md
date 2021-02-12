@@ -1,3 +1,3 @@
-#Todo list
+# Todo list
 - Esteban Mestrie
 - Alexis Piraux
