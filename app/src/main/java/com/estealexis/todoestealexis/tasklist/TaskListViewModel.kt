@@ -24,7 +24,7 @@ class TaskListViewModel : ViewModel() {
             val tasksResponse = repository.updateTask(task)
             if (tasksResponse) {
                 val tasks = _taskList.value.orEmpty().toMutableList()
-                val position = tasks.indexOfFirst { it.id == task.id }
+                val position = tasks.indexOf(task.id)
                 tasks[position] = task
                 _taskList.value = tasks
             }

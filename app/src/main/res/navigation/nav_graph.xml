@@ -39,4 +39,9 @@
         android:name="com.estealexis.todoestealexis.tasklist.TaskListFragment"
         android:label="fragment_task_list"
         tools:layout="@layout/fragment_task_list" />
+    <fragment
+        android:id="@+id/taskFragment"
+        android:name="com.estealexis.todoestealexis.task.TaskFragment"
+        android:label="task_fragment"
+        tools:layout="@layout/task_fragment" />
 </navigation>

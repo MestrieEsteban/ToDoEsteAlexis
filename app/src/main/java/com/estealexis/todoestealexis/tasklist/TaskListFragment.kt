@@ -5,18 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.estealexis.todoestealexis.R
 import com.estealexis.todoestealexis.databinding.FragmentTaskListBinding
 import com.estealexis.todoestealexis.task.TaskFragment
 import com.estealexis.todoestealexis.task.TaskFragment.Companion.ADD_TASK_REQUEST_CODE
 import com.estealexis.todoestealexis.userinfo.UserInfoActivity
 import com.estealexis.todoestealexis.userinfo.UserInfoViewModel
 import kotlinx.coroutines.launch
+import java.sql.ResultSet
 
 
 class TaskListFragment : Fragment(){
@@ -65,14 +70,18 @@ class TaskListFragment : Fragment(){
         }
 
         taskListAdapter.onEditTask = {
-            val intent = Intent(activity, TaskFragment::class.java)
-            intent.putExtra("editedTask", it)
-            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+
+            val bundle = bundleOf("editedTask" to it)
+            view.findNavController().navigate(R.id.taskFragment, bundle)
+           // val intent = Intent(activity, TaskFragment::class.java)
+            //intent.putExtra("editedTask", it)
+           // startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
         }
 
         binding.floatingActionButton2.setOnClickListener(){
-            val intent = Intent(activity, TaskFragment::class.java)
-            startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+            //val intent = Intent(activity, TaskFragment::class.java)
+            //startActivityForResult(intent, ADD_TASK_REQUEST_CODE)
+            view.findNavController().navigate(R.id.taskFragment)
         }
 
         binding.profileImage.setOnClickListener({
@@ -81,6 +90,7 @@ class TaskListFragment : Fragment(){
         })
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val task = data?.getSerializableExtra(TaskFragment.TASK_KEY) as Task
@@ -89,4 +99,5 @@ class TaskListFragment : Fragment(){
             if(isUpdate === null){ taskviewModel.addTask(task) } else { taskviewModel.updateTask(task) }
         }
     }
+
 }
